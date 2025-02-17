@@ -60,16 +60,16 @@ export default function GuestLayout({ children }) {
     return (
         <div className="flex min-h-screen flex-col">
             {/* Navbar */}
-            <header className="flex items-center justify-between bg-white px-4 py-4 shadow-md md:px-60">
+            <header className="flex items-center justify-between bg-white px-4 py-4 shadow-md md:px-12 xl:px-60">
                 <Link href="/">
                     <h1 className="text-2xl font-bold text-gray-900">
                         Sri Adnyani
                     </h1>
                 </Link>
-                <button className="text-2xl md:hidden" onClick={toggleSideBar}>
+                <button className="text-2xl xl:hidden" onClick={toggleSideBar}>
                     {isMobile ? <FaTimes /> : <FaBars />}
                 </button>
-                <nav className="hidden gap-8 md:flex">
+                <nav className="hidden gap-8 xl:flex">
                     {navLinks.map(renderNavLink)}
                 </nav>
             </header>
@@ -105,7 +105,7 @@ export default function GuestLayout({ children }) {
             <main className="flex-grow">{children}</main>
 
             {/* Footer */}
-            <footer className="flex flex-col gap-4 bg-black p-4 md:grid md:grid-cols-2 md:gap-0 md:px-60 md:py-12">
+            <footer className="flex flex-col gap-4 bg-black p-4 md:grid md:grid-cols-2 md:gap-0 md:px-12 md:py-12 xl:px-60">
                 <div className="flex flex-col">
                     <h1 className="text-3xl font-bold text-white">
                         Ni Luh Putu Sri Adnyani

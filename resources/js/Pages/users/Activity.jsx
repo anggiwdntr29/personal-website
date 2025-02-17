@@ -32,9 +32,9 @@ const data = [
 
 const ActivityBox = ({ image, date, title }) => {
     return (
-        <div className="relative flex flex-col rounded-xl border border-gray-200 shadow-lg transition-all duration-300 hover:border-blue-400 hover:shadow-xl">
+        <div className="relative flex flex-col rounded-xl border border-gray-200 shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-xl">
             <img
-                className="h-40 w-full rounded-t-xl object-cover transition-all duration-300 hover:scale-105"
+                className="h-40 w-full rounded-t-xl object-cover transition-all duration-300"
                 src={image}
                 alt="Background"
             />
@@ -102,7 +102,7 @@ const Activity = () => {
                 />
             </div>
 
-            <section className="mb-10 grid grid-cols-1 gap-6 px-6 sm:grid-cols-2 sm:px-12 md:grid-cols-3 lg:grid-cols-4 lg:px-24">
+            <section className="mb-10 grid grid-cols-1 gap-6 px-6 sm:grid-cols-2 sm:px-12 md:grid-cols-3 lg:grid-cols-4 lg:px-60">
                 {filteredData.map((item, index) => (
                     <ActivityBox
                         key={index}
