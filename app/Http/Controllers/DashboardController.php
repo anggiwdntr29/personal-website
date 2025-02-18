@@ -4,58 +4,67 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Community;
+use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('Dashboard');
+        $query = Post::query();
+        
+        if ($request->category && $request->category !== 'all') {
+            $query->where('category', $request->category);
+        }
+        
+        $data = $query->paginate(10);
+        
+        return Inertia::render('Dashboard', [
+            'data' => $data->items(),
+            'pagination' => [
+                'current_page' => $data->currentPage(),
+                'last_page' => $data->lastPage(),
+                'next_page_url' => $data->nextPageUrl(),
+                'prev_page_url' => $data->previousPageUrl(),
+                'from' => ($data->currentPage() - 1) * $data->perPage() + 1,
+            ],
+            'filters' => [
+                'category' => $request->category ?? 'all',
+            ],
+        ]);
+    }
+
+    public function add()
+    {
+        return Inertia::render('Post/AddPost');
     }
     // public function view(string $id)
     // {
     //     return Inertia::render('Manage/Community/ViewCommunity', ['data' => Community::find($id)]);
     // }
 
-    
-    
-    // public function add()
-    // {
-    //     return Inertia::render('Manage/Community/AddCommunity');
-    // }
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'title' => 'required',
-    //         'desc' => 'required',
-    //         'cover' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    //         'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-    //     ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'desc' => 'required',
+            'category' => 'required|string',
+            'cover' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    //     if ($request->cover) {
-    //         $file_name = time() . '_' . uniqid() . '.' . $request->cover->extension();
-    //         $request->cover->move('storage/images', $file_name);
-    //     }
+        if ($request->cover) {
+            $file_name = time() . '_' . uniqid() . '.' . $request->cover->extension();
+            $request->cover->move('storage/images', $file_name);
+        }
 
-    //     $imagePaths = [];
-    //     if ($request->hasFile('images')) {
-    //         foreach ($request->file('images') as $image) {
-    //             $imageName = time() . '_' . uniqid() . '.' . $image->extension();
-    //             $image->move('storage/images', $imageName);
-    //             $imagePaths[] = $imageName; 
-    //         }
-    //     }
-        
-    //     $community = Community::create([
-    //         'title' => $request->title,
-    //         'desc' => $request->desc,
-    //         'cover' => $file_name,
-    //         'images' => $imagePaths
-    //     ])->refresh();
+        Post::create([
+            'title' => $request->title,
+            'desc' => $request->desc,
+            'cover' => $file_name,
+            'category' => $request->category,
+        ])->refresh();
+    }
 
-    //     return to_route('community.index');
-    // }
     // public function edit(string $id)
     // {
     //     return Inertia::render('Manage/Community/EditCommunity', ['data' => Community::find($id)]);
@@ -115,30 +124,21 @@ class DashboardController extends Controller
     //     return redirect()->route('community.index')->with('success', 'Community updated successfully!');
     // }
     
-    // public function destroy($id)
-    // {
-    //     $community = Community::findOrFail($id);
+    public function destroy($id)
+    {
+        $post = Post::findOrFail($id);
 
-    //     if ($community->cover && $community->cover !== 'default.png') {
-    //         $coverPath = public_path("storage/images/{$community->cover}");
-    //         if (file_exists($coverPath)) {
-    //             unlink($coverPath);
-    //         }
-    //     }
+        if ($post->cover && $post->cover !== 'default.png') {
+            $coverPath = public_path("storage/images/{$post->cover}");
+            if (file_exists($coverPath)) {
+                unlink($coverPath);
+            }
+        }
 
-    //     if (!empty($community->images)) {
-    //         foreach ($community->images as $image) {
-    //             $imagePath = public_path("storage/images/{$image}");
-    //             if (file_exists($imagePath)) {
-    //                 unlink($imagePath);
-    //             }
-    //         }
-    //     }
+        $post->delete();
 
-    //     $community->delete();
-
-    //     return response()->json([
-    //         'message' => 'Community deleted successfully',
-    //     ], 200);
-    // }
+        return response()->json([
+            'message' => 'Community deleted successfully',
+        ], 200);
+    }
 }

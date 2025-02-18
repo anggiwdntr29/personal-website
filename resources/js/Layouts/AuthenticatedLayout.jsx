@@ -44,7 +44,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 <nav>
                     <div className="flex flex-col space-y-2 text-gray-300">
                         <Link
-                            href={route('dashboard')}
+                            href={route('dashboard.index')}
                             className="rounded-md p-3 text-sm font-medium transition hover:bg-gray-700 hover:text-white"
                         >
                             Dashboard

@@ -35,9 +35,8 @@ Route::get('/gallery', function() {
     return Inertia::render('users/Gallery');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index']
+        )->middleware(['auth', 'verified'])->name('dashboard.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -45,10 +44,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/dashboard/add', [DashboardController::class, 'add'])->name('post.add');
+    Route::post('/dashboard/posts', [DashboardController::class, 'store'])->name('post.store');
+    Route::delete('/dashboard/{id}', [DashboardController::class, 'destroy'])->name('post.destroy');
 
 
     // Route::get('/dashboard/community', [CommunityServiceController::class, 'index'])->name('community.index');
-    // Route::get('/dashboard/community/add', [CommunityServiceController::class, 'add'])->name('community.add');
     // Route::get('/dashboard/community/edit/{id}', [CommunityServiceController::class, 'edit'])->name('community.edit');
     // Route::get('/dashboard/community/view/{id}', [CommunityServiceController::class, 'view'])->name('community.view');
    

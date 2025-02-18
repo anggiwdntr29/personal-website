@@ -18,7 +18,7 @@ const FileDropzone = ({
                 <img
                     src={preview}
                     alt="Preview"
-                    className="h-48 w-full rounded-lg border object-cover"
+                    className="h-72 w-full rounded-lg border object-cover"
                 />
             ) : (
                 <p className="text-sm">
@@ -38,26 +38,4 @@ const FileDropzone = ({
     </div>
 );
 
-const ImagePreview = ({ images, removeImage }) =>
-    images.length > 0 && (
-        <div className="mt-3 grid grid-cols-3 gap-2">
-            {images.map((img, index) => (
-                <div key={index} className="relative">
-                    <img
-                        src={img}
-                        alt={`Preview ${index + 1}`}
-                        className="h-40 w-full rounded-lg border object-cover"
-                    />
-                    <button
-                        type="button"
-                        className="absolute right-1 top-1 rounded-full px-2 py-1 text-xs text-white"
-                        onClick={() => removeImage(index)}
-                    >
-                        ❌
-                    </button>
-                </div>
-            ))}
-        </div>
-    );
-
-export { FileDropzone, ImagePreview };
+export default FileDropzone;
